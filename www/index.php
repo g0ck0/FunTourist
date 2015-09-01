@@ -28,7 +28,7 @@ if(isset($_SESSION["sess_user"])){
   
 	<style>
 		#submit    {
-			background:url(images/down-arrow.png);
+			background:url(images/down-arrow.png) center;
 			background-repeat: no-repeat;
 			
 			color: white;

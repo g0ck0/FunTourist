@@ -182,13 +182,13 @@ if(!isset($_SESSION["sess_user"])){
     
     #div1 {
         width: 33%;
-        height: 35px;
+        height: 36px;
         padding-left: 10px;
         border: 1px solid #aaaaaa;
         border-radius: 7px;
         min-width: 71%;
         margin: 0 auto;
-        margin-top: -80px;
+        margin-top: 10px;
         padding-bottom: 11px;
         margin-right: 25%;
     }
@@ -226,7 +226,7 @@ if(!isset($_SESSION["sess_user"])){
         border-radius: 50%;
         box-shadow: 3px 3px 6px 0px #515151;
         margin-left: 81%;
-        margin-bottom: -3%;
+       /* margin-bottom: -3%;*/
     }
     
     .clear-letters:hover {
@@ -262,9 +262,96 @@ if(!isset($_SESSION["sess_user"])){
 		margin:0 auto;
 		background-color: black;
 	}
+     #submit:hover {
+        color: #E27689 !important;
+    }
 	p{
 	margin-bottom: 4em;
 	}
+    @media screen and (min-width: 300px) {
+    .clear-letters  {
+    width: 65px !important;
+    height: 65px;
+    background: #222629;
+    z-index: 10;
+    border-radius: 50%;
+    box-shadow: 3px 3px 6px 0px #515151;
+    margin-left: 78%;
+    margin-top: -16%;
+    }
+}
+ @media screen and (min-width: 400px) {
+    .clear-letters  {
+   width: 65px !important;
+    height: 65px;
+    background: #222629;
+    z-index: 10;
+    border-radius: 50%;
+    box-shadow: 3px 3px 6px 0px #515151;
+    margin-left: 81%;
+    margin-top: -15%;
+    }
+}
+ @media screen and (min-width: 500px) {
+    .clear-letters  {
+    width: 65px !important;
+    height: 65px;
+    background: #222629;
+    z-index: 10;
+    border-radius: 50%;
+    box-shadow: 3px 3px 6px 0px #515151;
+    margin-left: 81%;
+    margin-top: -12%;
+    }
+}
+ @media screen and (min-width: 900px) {
+    .clear-letters  {
+    width: 65px !important;
+    height: 65px;
+    background: #222629;
+    z-index: 10;
+    border-radius: 50%;
+    box-shadow: 3px 3px 6px 0px #515151;
+    margin-left: 81%;
+    margin-top: -6%;
+    }
+}
+ @media screen and (min-width: 1000px) {
+    .clear-letters  {
+    width: 65px !important;
+    height: 65px;
+    background: #222629;
+    z-index: 10;
+    border-radius: 50%;
+    box-shadow: 3px 3px 6px 0px #515151;
+    margin-left: 81%;
+    margin-top: -6%;
+    }
+}
+ @media screen and (min-width: 1300px) {
+    .clear-letters  {
+width: 65px !important;
+    height: 65px;
+    background: #222629;
+    z-index: 10;
+    border-radius: 50%;
+    box-shadow: 3px 3px 6px 0px #515151;
+    margin-left: 81%;
+    margin-top: -6%;
+    }
+}
+ @media screen and (max-width: 220px) {
+    .clear-letters  {
+    width: 65px !important;
+    height: 65px;
+    background: #222629;
+    z-index: 10;
+    border-radius: 50%;
+    box-shadow: 3px 3px 6px 0px #515151;
+    margin-left: 81%;
+    margin-top: -22%;
+    }
+}
     </style>
 </head>
 <body>
@@ -322,8 +409,8 @@ if(!isset($_SESSION["sess_user"])){
                 <a href="#" class="image featured"><img src="images/logo.png" alt="" />
                 </a>
                 <p>Form a word</p>
-                <div class="button-help"><a href="#openModal" id="modalLink"><span class="icon fa-question-circle"></span></a>
-                </div>
+               <!-- <div class="button-help"><a href="#openModal" id="modalLink"><span class="icon fa-question-circle"></span></a>
+                </div>-->
             </div>
 			
 			
@@ -339,8 +426,9 @@ if(!isset($_SESSION["sess_user"])){
         <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
 		
 		<!-- kopce za da go cisti textboxot -->
-		<div class="clear-letters">
-            <div class="btn-icon"><span class="icon fa-refresh" id="btn-clear"></span> </div>
+        
+		<div class="clear-letters" id="refresh">
+            <div class="btn-icon" ><span class="icon fa-refresh" id="btn-clear"></span> </div>
         </div>
 		
 		<br>
@@ -394,7 +482,7 @@ if(!isset($_SESSION["sess_user"])){
 		}
 		
 	?>
-		
+		<div id="refreshed-div">
 		<div id="drag1" class="draggable">I </div>
         <div id="drag1" class="draggable">A </div>
         <div id="drag1" class="draggable">B </div>
@@ -403,7 +491,7 @@ if(!isset($_SESSION["sess_user"])){
         <div id="drag1" class="draggable">H</div>
         <div id="drag1" class="draggable">O </div>
         <!--  <div id="drag2" class="draggable">The piano is black</div>-->
-		
+		</div>
 		
     </div>
 	
@@ -450,5 +538,15 @@ function drop(ev) {
     var data = ev.dataTransfer.getData("Text");
     ev.target.appendChild(document.getElementById(data));
 }
+$(document).ready(function() { /// Wait till page is loaded
+$('#refresh').click(function(){
+$('#refreshed-div').load('scrabble.php #refreshed-div', function() {
+/// can add another function here
+$('#div1').empty();
+$('#refreshed-div').children("div").addClass("draggable");
+});
+});
+});
+
 </script>
 </html>
