@@ -26,7 +26,8 @@ if(!isset($_SESSION["sess_user"])){
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="js/materialize.js"></script>
     <script type="text/javascript">
-    app.initialize();
+        app.initialize();
+        //go povikuva initialize
     </script>
     <noscript>
         <link rel="stylesheet" href="css/skel.css" />
@@ -183,6 +184,28 @@ if(!isset($_SESSION["sess_user"])){
 		background-color: black;
 	}
     </style>
+
+    <script>
+        //getLatLong
+        $( document ).ready(function() {
+            $.ajax({
+                url:"map.php",
+                type:"POST",
+                async:false,
+                data:{getlat:$("#getlat").val(),getlong:$("#getlong").val()},
+                success: function (response){
+                        if (response == 'true') {
+                            alert("script was successful");
+                        } else {
+                            alert("script was unsuccessful");
+                        }
+                    },
+                    error: function() { 
+                        alert("something very bad went wrong");
+                    }
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -247,9 +270,30 @@ if(!isset($_SESSION["sess_user"])){
         <!-- button za proverka na bukva-->
 				<form action="" method="POST">
 					<input type="submit" id="submit" name="submit" value="check for letter"/>
-				</form>
+                    <!-- <input type="submit" id="submit" name="submit1" value="lat/long"/>-->
+                    <!-- getLatLong -->
+                    <br>
+                    <br>
+                    <input type="text" name= "getlong" id="getlong" width="20px">
+                    <br>
+                    <input type= "text" name ="getlat" id="getlat" width="20px">
+
+                </form>
+
 				<?php
-					//$lat = "<script> document.write(latitude)</script>";
+					//getLatLong
+                    if(isset($_POST["getlat"]))
+                    {
+                        $lat = $_POST["getlat"];
+                        echo $lat;
+                    }
+                    if(isset($_POST["getlon"]))
+                    {
+                        $lon = $_POST["getlon"];
+                        echo $lon;
+                    }
+
+                    //$lat = "<script> document.write(latitude)</script>";
 					//echo $lat;
 					
 					if(isset($_POST["submit"])){
@@ -348,20 +392,19 @@ if(!isset($_SESSION["sess_user"])){
 							echo "<br> Sorry, there is no letter on that location.";
 						}
 						//----------------------------------
-						
 						$con->close();					
 					}
+
 				?>
-		</section>
-        </div>
-		
+
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
         <script type="text/javascript" src="js/materialize.min.js"></script>
         <script>
         var map;
-		var latitude;
-		var longitude;
-		
+        var latitude;
+        var longitude;
+        //var dani = 22.5;
+        
         function initialize() {
             var mapOptions = {
                 zoom: 15
@@ -370,14 +413,17 @@ if(!isset($_SESSION["sess_user"])){
                 mapOptions);
             // Try HTML5 geolocation
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
+                navigator.geolocation.getCurrentPosition(function(position) {initialize
                     var pos = new google.maps.LatLng(position.coords.latitude,
                         position.coords.longitude);
-					latitude = position.coords.latitude.toFixed(6);
-					longitude = position.coords.longitude.toFixed(6);
-					
-					alert ("lat: " + latitude + " " +  "long: " + longitude);
-					
+
+                    //getLatLong
+                    latitude = position.coords.latitude.toFixed(6);
+                    longitude = position.coords.longitude.toFixed(6);
+                    //alert ("lat: " + latitude + " " +  "long: " + longitude);
+                    document.getElementByID("getlong").value = longitude;
+                    document.getElementByID("getlat").value = latitude;
+                    
                     var marker = new google.maps.Marker({
                         position: pos,
                         map: map,
@@ -407,7 +453,9 @@ if(!isset($_SESSION["sess_user"])){
             var infowindow = new google.maps.InfoWindow(options);
             map.setCenter(options.position);
         }
+        //go povikuva initialize
         google.maps.event.addDomListener(window, 'load', initialize);
+        
         (function() {
             var dialog = document.getElementById('window');
             document.getElementById('show').onclick = function() {
@@ -417,9 +465,13 @@ if(!isset($_SESSION["sess_user"])){
                 dialog.close();
             };
         })();
+
         </script>
-		
-		<?php $lat = "<script> alert(); alert(latitude); document.write(latitude);</script>"; echo $lat;?>
+        
+		</section>
+        </div>
+
+		<?php /*$lat = "<script> alert(); alert(latitude); document.write(latitude);</script>"; echo $lat;*/?>
 		
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script>
