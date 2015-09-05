@@ -342,7 +342,7 @@ if(!isset($_SESSION["sess_user"])){
 		<br>
 		<!-- kopce sto ja prakja destinacijata-->
 		<form action="" method="POST">
-			<input type="submit" id="submit" name="submit" value="send the destination"/>
+			<input type="submit" id="submit" name="submit" value="send the destination" onclick="sendDestination()" />
 		</form>
 			
         </section>
@@ -353,6 +353,7 @@ if(!isset($_SESSION["sess_user"])){
 			<div id="drag1" class="draggable">C </div>
 		</div>
         <br>
+        <div id="words">dsdasda</div>
         
 		<?php 
 		$con=mysqli_connect('lean.mk','mktour@lean.mk','mktour123mktour!@','mktour'); 
@@ -443,5 +444,17 @@ function drop(ev) {
     var data = ev.dataTransfer.getData("Text");
     ev.target.appendChild(document.getElementById(data));
 }
+var word;
+function sendDestination()
+{
+word = document.getElementById("div1").textContent;
+            if ( word ){
+            
+                    alert ( word);
+                    document.getElementById("words").innerHTML+=word;
+                
+            }
+}  
+
 </script>
 </html>
