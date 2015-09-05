@@ -26,8 +26,7 @@ if(!isset($_SESSION["sess_user"])){
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="js/materialize.js"></script>
     <script type="text/javascript">
-        app.initialize();
-        //go povikuva initialize
+    app.initialize();
     </script>
     <noscript>
         <link rel="stylesheet" href="css/skel.css" />
@@ -184,31 +183,12 @@ if(!isset($_SESSION["sess_user"])){
 		background-color: black;
 	}
     </style>
-
-    <script>
-        //getLatLong
-        $( document ).ready(function() {
-            $.ajax({
-                url:"map.php",
-                type:"POST",
-                async:false,
-                data:{getlat:$("#getlat").val(),getlong:$("#getlong").val()},
-                success: function (response){
-                        if (response == 'true') {
-                            alert("script was successful");
-                        } else {
-                            alert("script was unsuccessful");
-                        }
-                    },
-                    error: function() { 
-                        alert("something very bad went wrong");
-                    }
-            });
-        });
-    </script>
+	
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+	
 </head>
 
-<body>
+<body onload="initialize()">
     <!-- Header -->
     <div id="header" class="skel-layers-fixed">
         <div class="top">
@@ -267,37 +247,30 @@ if(!isset($_SESSION["sess_user"])){
 				
                 <div id="mapPlaceholder"></div>
                 
-        <!-- button za proverka na bukva-->
+				
 				<form action="" method="POST">
+					<!-- get lat/lon -->
+					<input type="hidden" id="getlat" name="getlat" /> 
+					<input type="hidden" id="getlon" name="getlon" />
+					
+					<!-- button za proverka na bukva -->
 					<input type="submit" id="submit" name="submit" value="check for letter"/>
-                    <!-- <input type="submit" id="submit" name="submit1" value="lat/long"/>-->
-                    <!-- getLatLong -->
-                    <br>
-                    <br>
-                    <input type="text" name= "getlong" id="getlong" width="20px">
-                    <br>
-                    <input type= "text" name ="getlat" id="getlat" width="20px">
-
-                </form>
-
+				</form>
+				
+				<br>
+				
 				<?php
-					//getLatLong
-                    if(isset($_POST["getlat"]))
-                    {
-                        $lat = $_POST["getlat"];
-                        echo $lat;
-                    }
-                    if(isset($_POST["getlon"]))
-                    {
-                        $lon = $_POST["getlon"];
-                        echo $lon;
-                    }
-
-                    //$lat = "<script> document.write(latitude)</script>";
-					//echo $lat;
-					
+				
+				?>
+				
+				<?php
 					if(isset($_POST["submit"])){
-					
+						//get lat/lon
+						if(!empty($_POST['getlat']) && !empty($_POST['getlon'])) {
+							$lat=$_POST['getlat'];
+							$lon=$_POST['getlon'];
+						}
+						
 						//konektira na baza ------------------
 						$con=mysqli_connect('lean.mk','mktour@lean.mk','mktour123mktour!@','mktour'); 
 						if(!$con) echo "<br> umre konekcija";
@@ -323,12 +296,16 @@ if(!isset($_SESSION["sess_user"])){
 						//------------------------------------------
 						$sql = "SELECT bukva, lokacija FROM Bukvi as b, Lokacii as l
 								WHERE b.idBukvi = l.idBukva
-								AND l.latitude = 42.006299
-								AND l.longitude = 21.389024";
+								AND l.latitude = '".$lat."'
+								AND l.longitude = '".$lon."'";
 								
 						$query=mysqli_query($con,$sql);
-						if(!$query) echo "<br> umre query";
-						else echo "<br> uspea query";
+						if(!$query) echo "<br> umre query <br>";
+						else echo "<br> uspea query <br>";
+						
+						echo $lat;
+						echo "&nbsp;";
+						echo $lon;
 						
 						$rez = $con->query($sql);
 						if ($rez->num_rows > 0) {
@@ -351,7 +328,7 @@ if(!isset($_SESSION["sess_user"])){
 								//----------------------------------
 								
 								//insert vo ima_bukva(tie bukvi se pojavuvaat vo scrabble)
-								/*
+								
 								$sql_insert = "insert into ima_bukva(idKorisnik,idBukva) 
 												values('$idUser','$idLetter')";
 								$insert = mysqli_query($con, $sql_insert);
@@ -363,11 +340,11 @@ if(!isset($_SESSION["sess_user"])){
 									echo "<br> Fail";
 								}
 								echo "<br> Congratulations! You have received the new letter: ". $letter . " !";
-								*/
+								
 								//----------------------------------------
 								
 								//delete na lokacijata vo Lokacii otkako ke ja zeme bukvata
-								/*$sql_delete = "delete from Lokacii where longitude = '21.389024' and latitude = '42.006299'";
+								$sql_delete = "delete from Lokacii where longitude = '".$lon."' and latitude = '".$lat."'";
 								$delete = mysqli_query($con, $sql_delete);
 								if($delete) {
 									echo "<br> Success delete";
@@ -375,16 +352,7 @@ if(!isset($_SESSION["sess_user"])){
 								else {
 									echo "<br> Fail delete";
 								}
-								//napraj da vnesuva nesto
-								$sql_i = "insert into Lokacii(lokacija, idBukva, longitude, latitude) 
-												values('daniela','d','21.389024','42.006299')";
-								$i = mysqli_query($con, $sql_i);
-								if($i) {
-									echo "<br> Success insert posle delete";
-								}
-								else {
-									echo "<br> Fail insert posle delete";
-								}*/
+								
 								//-----------------------------------------------
 							}
 						} 
@@ -392,19 +360,22 @@ if(!isset($_SESSION["sess_user"])){
 							echo "<br> Sorry, there is no letter on that location.";
 						}
 						//----------------------------------
+						
 						$con->close();					
 					}
-
 				?>
-
+				
+				
+				
+				
+		</section>
+        </div>
+		
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
         <script type="text/javascript" src="js/materialize.min.js"></script>
         <script>
         var map;
-        var latitude;
-        var longitude;
-        //var dani = 22.5;
-        
+		
         function initialize() {
             var mapOptions = {
                 zoom: 15
@@ -413,32 +384,41 @@ if(!isset($_SESSION["sess_user"])){
                 mapOptions);
             // Try HTML5 geolocation
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {initialize
+                navigator.geolocation.getCurrentPosition(function(position) {
                     var pos = new google.maps.LatLng(position.coords.latitude,
                         position.coords.longitude);
-
-                    //getLatLong
-                    latitude = position.coords.latitude.toFixed(6);
-                    longitude = position.coords.longitude.toFixed(6);
-                    //alert ("lat: " + latitude + " " +  "long: " + longitude);
-                    document.getElementByID("getlong").value = longitude;
-                    document.getElementByID("getlat").value = latitude;
-                    
+					
                     var marker = new google.maps.Marker({
                         position: pos,
                         map: map,
                         title: 'Hello World!'
                     });
                     map.setCenter(pos);
+					
+					document.getElementById("getlat").value = position.coords.latitude.toFixed(6);
+					document.getElementById("getlon").value = position.coords.longitude.toFixed(6);
+					 $.ajax({  
+						type: 'POST',
+						url: 'index.php', 
+						async:false,
+						data: { lat: position.coords.latitude.toFixed(6) },
+						complete: function(text){
+							//alert("success");
+							getLocation();
+							return text;
+							}
+					 });
                 }, function() {
                     handleNoGeolocation(true);
                 });
-            } else {
+            } 
+			
+			else {
                 // Browser doesn't support Geolocation
                 handleNoGeolocation(false);
             }
         }
-
+		
         function handleNoGeolocation(errorFlag) {
             if (errorFlag) {
                 var content = 'Error: The Geolocation service failed.';
@@ -453,9 +433,7 @@ if(!isset($_SESSION["sess_user"])){
             var infowindow = new google.maps.InfoWindow(options);
             map.setCenter(options.position);
         }
-        //go povikuva initialize
         google.maps.event.addDomListener(window, 'load', initialize);
-        
         (function() {
             var dialog = document.getElementById('window');
             document.getElementById('show').onclick = function() {
@@ -465,14 +443,10 @@ if(!isset($_SESSION["sess_user"])){
                 dialog.close();
             };
         })();
-
-        </script>
-        
-		</section>
-        </div>
-
-		<?php /*$lat = "<script> alert(); alert(latitude); document.write(latitude);</script>"; echo $lat;*/?>
 		
+		
+        </script>
+	
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script>
         $(function() {
@@ -481,7 +455,7 @@ if(!isset($_SESSION["sess_user"])){
                 e.preventDefault();
                 $("body").append(appendthis);
                 $(".modal-overlay").fadeTo(500, 0.7);
-                //$(".js-modalbox").fadeIn(500);
+				
                 var modalBox = $(this).attr('data-modal-id');
                 $('#' + modalBox).fadeIn($(this).data());
             });
