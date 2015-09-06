@@ -343,23 +343,25 @@ if(!isset($_SESSION["sess_user"])){
 		
 		
 		<br>
-		<!-- kopce sto ja prakja destinacijata-->
+		
 		<form action="" method="POST">
+			<!-- //get word -->
+			<input type="hidden" id="words" name="words" value="dsdasda"/>
+			<!-- kopce sto ja prakja destinacijata-->
 			<input type="submit" id="submit" name="submit" value="send the destination" onclick="sendDestination()" />
 		</form>
 			
         </section>
 		<div id="vrati" ondrop="drop(event)" ondragover="allowDrop(event)">
-			<div id="drag1" class="draggable">I </div>
-			<div id="drag1" class="draggable">A </div>
-			<div id="drag1" class="draggable">B </div>
-			<div id="drag1" class="draggable">C </div>
+			<div id="drag1" class="draggable">L </div>
+			<div id="drag1" class="draggable">O </div>
+			<div id="drag1" class="draggable">N </div>
+			<div id="drag1" class="draggable">D </div>
+			<div id="drag1" class="draggable">O </div>
+			<div id="drag1" class="draggable">N </div>
+			- se vrakaat posto se fiksni
 		</div>
-<<<<<<< HEAD
-=======
-        <br>
-        <div id="words">dsdasda</div>
->>>>>>> origin/master
+
         
         <div id="vrati" ondrop="drop(event)" ondragover="allowDrop(event)">
 			<?php 
@@ -404,9 +406,17 @@ if(!isset($_SESSION["sess_user"])){
 				
 				echo "<br>----- php po klik na kopceto -------<br>";
 				
+				//get word
+				if(!empty($_POST['words'])) {
+					$word=$_POST['words'];
+				}
+				
+				//echo $word;
+				$destinacija = preg_replace('/\s/u', '', $word); 
+				echo "Formirana destinacija: ".$destinacija.".";
+				
 				$sql1 = "SELECT idDestinacija,destinacija FROM Destinacii
-						WHERE destinacija='LONDON'";
-						//da se smeni da ne e fiksna dest, tuku da e zborceto od bukvite
+						WHERE destinacija='".$destinacija."'";
 								
 				$query1=mysqli_query($con,$sql1);
 				if(!$query1) echo "<br> umre query <br>";
@@ -419,7 +429,7 @@ if(!isset($_SESSION["sess_user"])){
 						$dest = $row1["destinacija"];
 						echo "dest: ". $dest. "<br>";
 						
-						echo "Congratulations, you have won a trip in [dest_zborceto]!";
+						echo "Congratulations, you have won a trip in ".$destinacija."!";
 					}	
 				}
 				else
@@ -483,16 +493,21 @@ function drop(ev) {
     var data = ev.dataTransfer.getData("Text");
     ev.target.appendChild(document.getElementById(data));
 }
+
+//get word
 var word;
 function sendDestination()
 {
-word = document.getElementById("div1").textContent;
-            if ( word ){
-            
-                    alert ( word);
-                    document.getElementById("words").innerHTML+=word;
-                
-            }
+	word = document.getElementById("div1").textContent;
+    if (word){
+        //alert ( word);
+        //document.getElementById("words").innerHTML+=word;
+		document.getElementById("words").value = word;
+    }
+	else
+	{
+		alert("Please enter letters to form a word.");
+	}
 }  
 
 </script>
