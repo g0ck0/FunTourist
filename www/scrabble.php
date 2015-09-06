@@ -265,6 +265,9 @@ if(!isset($_SESSION["sess_user"])){
 	p{
 	margin-bottom: 4em;
 	}
+	#vrati {
+		text-decoration:bold;
+	}
     </style>
 </head>
 <body>
@@ -352,50 +355,83 @@ if(!isset($_SESSION["sess_user"])){
 			<div id="drag1" class="draggable">B </div>
 			<div id="drag1" class="draggable">C </div>
 		</div>
-        <br>
         
-		<?php 
-		$con=mysqli_connect('lean.mk','mktour@lean.mk','mktour123mktour!@','mktour'); 
-		if(!$con) echo "<br> umre konekcija";
-		else echo "<br> uspea konekcija <br>";
-		
-		//id na user-----------$idUser
-		$user =$_SESSION['sess_user'];
-			echo "user: ". $user;
-		$proverka_user = "select idKorisnik from Korisnik as k
-						  where k.username ='".$user."'";
-		$rez1 = $con->query($proverka_user);
-		while($row1 = $rez1->fetch_assoc()) {
-			$idUser = $row1["idKorisnik"];
-			echo "<br> idKorisnik: ". $idUser. "<br>";
-		}
-		
-		//selektiraj gi bukvite od ima_bukva
-		$sql = "SELECT bukva FROM ima_bukva as ima, Bukvi as b
-				WHERE ima.idKorisnik = '".$idUser."'
-				AND ima.idBukva = b.idBukvi";
-		$query=mysqli_query($con,$sql);
-		if(!$query) echo "<br> umre query <br>";
-		else echo "<br> uspea query <br>";
-		
-		$rez = $con->query($sql);
-		if ($rez->num_rows > 0) {
-			while($row = $rez->fetch_assoc()) {
+        <div id="vrati" ondrop="drop(event)" ondragover="allowDrop(event)">
+			<?php 
+			$con=mysqli_connect('lean.mk','mktour@lean.mk','mktour123mktour!@','mktour'); 
+			if(!$con) echo "<br> umre konekcija";
+			else echo "<br> uspea konekcija <br>";
 			
-			?> 
-			<div id="vrati" ondrop="drop(event)" ondragover="allowDrop(event)">
+			//id na user-----------$idUser
+			$user =$_SESSION['sess_user'];
+				echo "user: ". $user;
+			$proverka_user = "select idKorisnik from Korisnik as k
+							  where k.username ='".$user."'";
+			$rez1 = $con->query($proverka_user);
+			while($row1 = $rez1->fetch_assoc()) {
+				$idUser = $row1["idKorisnik"];
+				echo "<br> idKorisnik: ". $idUser. "<br>";
+			}
+			//selektiraj gi bukvite od ima_bukva
+			$sql = "SELECT bukva FROM ima_bukva as ima, Bukvi as b
+					WHERE ima.idKorisnik = '".$idUser."'
+					AND ima.idBukva = b.idBukvi";
+			$query=mysqli_query($con,$sql);
+			if(!$query) echo "<br> umre query <br>";
+			else echo "<br> uspea query <br>";
+			
+			$rez = $con->query($sql);
+			if ($rez->num_rows > 0) {
+				while($row = $rez->fetch_assoc()) {
+				?> 
 				<div id="drag1" class="draggable">
 					<?php echo " ".$row["bukva"]." ";?>
 				</div>
-			</div>
-			<?php
+				<?php
+				}
 			}
-		}
-		else {
-			echo "0 results";
-		}
+			else {
+				echo "You don't have any letters yet!";
+			}
+			
+			
+			if(isset($_POST["submit"])){
+				
+				echo "<br>----- php po klik na kopceto -------<br>";
+				
+				$sql1 = "SELECT idDestinacija,destinacija FROM Destinacii
+						WHERE destinacija='LONDON'";
+						//da se smeni da ne e fiksna dest, tuku da e zborceto od bukvite
+								
+				$query1=mysqli_query($con,$sql1);
+				if(!$query1) echo "<br> umre query <br>";
+				else echo "<br> uspea query <br>";
+			
+				$rez1 = $con->query($sql1);
+				if ($rez1->num_rows > 0) {
+					while($row1 = $rez1->fetch_assoc()) {
+						echo "<br> idDestinacija: ". $row1["idDestinacija"]. " - destinacija: ". $row1["destinacija"]. "<br>";
+						$dest = $row1["destinacija"];
+						echo "dest: ". $dest. "<br>";
+						
+						echo "Congratulations, you have won a trip in [dest_zborceto]!";
+					}	
+				}
+				else
+				{
+					echo "<br>We're sorry, that destination doesn't exist in our database.";
+				}
+				
+				//da se napravi delete na site bukvi koi go formiraat toa zborce
+				//poedinecno da se zacuvaat??
+				//delete vo ima_bukva where idBukva i idKorisnik($idUser)
+				
+				
+			}
+			
+			?>
+		</div>	
 		
-	?>
 		
     </div>
 	
@@ -438,7 +474,6 @@ function drag(ev) {
     console.log('targetid: ' + ev.target.id);
 }
 function drop(ev) {
-	alert(ev.target.value);
     ev.preventDefault();
     var data = ev.dataTransfer.getData("Text");
     ev.target.appendChild(document.getElementById(data));
