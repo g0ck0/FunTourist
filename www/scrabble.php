@@ -379,6 +379,7 @@ if(!isset($_SESSION["sess_user"])){
 				$idUser = $row1["idKorisnik"];
 				echo "<br> idKorisnik: ". $idUser. "<br>";
 			}
+			
 			//selektiraj gi bukvite od ima_bukva
 			$sql = "SELECT bukva FROM ima_bukva as ima, Bukvi as b
 					WHERE ima.idKorisnik = '".$idUser."'
@@ -390,11 +391,14 @@ if(!isset($_SESSION["sess_user"])){
 			$rez = $con->query($sql);
 			if ($rez->num_rows > 0) {
 				while($row = $rez->fetch_assoc()) {
-				?> 
-				<div id="drag1" class="draggable">
-					<?php echo " ".$row["bukva"]." ";?>
-				</div>
-				<?php
+					//$idImaBukva = $row["id?"]; //- id? treba da stoi vo select-ot - nez kako se vika atributot vo tabelata
+					//echo "<br> idImaBukva: ". $idImaBukva. "<br>";
+					//for vo js sto ke cita divovi
+					?> 
+					<div id="<?php echo $idImaBukva;?>" class="draggable"> 
+						<?php echo " ".$row["bukva"]." ";?>
+					</div>
+					<?php
 				}
 			}
 			else {
@@ -406,12 +410,16 @@ if(!isset($_SESSION["sess_user"])){
 				
 				echo "<br>----- php po klik na kopceto -------<br>";
 				
+				//stringot so id objektot vo ciklus podeli go po zapirki i da gi zacuvuva vo array
+				//pr. array(4,9) -> array[1]=9
+				//dolu delete from ima_bukva where [for i=o do array.lengthi++ {id? = niza[i]}] - vidi vo sql sintaksa za for
+				//ili sql da e vnatre vo for-ot
+				
 				//get word
 				if(!empty($_POST['words'])) {
 					$word=$_POST['words'];
 				}
-				
-				//echo $word;
+				//echo $word;	
 				$destinacija = preg_replace('/\s/u', '', $word); 
 				echo "Formirana destinacija: ".$destinacija.".";
 				
@@ -498,6 +506,8 @@ function drop(ev) {
 var word;
 function sendDestination()
 {
+	// for da gi cita site divovi sto se vnatre i da gi zapise vo lista/niza/objekt so .textContext za da bide string
+	// prati go vo hidden field za da go prevzeme php od html
 	word = document.getElementById("div1").textContent;
     if (word){
         //alert ( word);
