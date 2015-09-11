@@ -7,7 +7,7 @@ if(!isset($_SESSION["sess_user"])){
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>App</title>
+    <title>Fun tourist</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -19,56 +19,10 @@ if(!isset($_SESSION["sess_user"])){
     <script src="js/skel-layers.min.js"></script>
     <script src="js/init.js"></script>
     <script src="http://maps.googleapis.com/maps/api/js"></script>
-    <script>
-    var myCenter = new google.maps.LatLng(51.508742, -0.120850);
-    function initialize() {
-        var mapProp = {
-            center: myCenter,
-            zoom: 5,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-        var marker = new google.maps.Marker({
-            position: myCenter,
-        });
-        marker.setMap(map);
-    }
-    google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script type="text/javascript">
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showCurrentLocation);
-    } else {
-        alert("Geolocation API not supported.");
-    }
-    function showCurrentLocation(position) {
-        var latitude = position.coords.latitude;
-        var longitude = position.coords.longitude;
-        var coords = new google.maps.LatLng(latitude, longitude);
-        var mapOptions = {
-            zoom: 15,
-            center: coords,
-            mapTypeControl: true,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        //create the map, and place it in the HTML map div
-        map = new google.maps.Map(
-            document.getElementById("mapPlaceholder"), mapOptions
-        );
-        //place the initial marker
-        var marker = new google.maps.Marker({
-            position: coords,
-            map: map,
-            title: "Current location!"
-        });
-    }
-    </script>
+    
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript">
-    app.initialize();
-    </script>
+    
     <noscript>
         <link rel="stylesheet" href="css/skel.css" />
         <link rel="stylesheet" href="css/style.css" />
@@ -82,7 +36,7 @@ if(!isset($_SESSION["sess_user"])){
         height: 34px;
         float: right;
         margin-top: -93px;
-        margin-right: 8%;
+        margin-right: 1%;
     }
     
     .button-help:hover {
@@ -265,9 +219,10 @@ if(!isset($_SESSION["sess_user"])){
 	p{
 	margin-bottom: 4em;
 	}
-	#vrati {
-		text-decoration:bold;
-	}
+    .p_lista {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
     </style>
 </head>
 <body>
@@ -276,7 +231,7 @@ if(!isset($_SESSION["sess_user"])){
         <div class="top">
             <!-- Logo -->
             <div id="logo">
-                <span class="image avatar48"><img src="images/travel.jpg" alt="" /></span>
+                <span class="image "><img src="images/travel.png" alt="" /></span>
                 <h1 id="title">
 					<span class="icon fa-user" style="margin-right:5px;"></span>
 					<?=$_SESSION['sess_user'];?> 
@@ -284,13 +239,14 @@ if(!isset($_SESSION["sess_user"])){
 					<br>
 					<a href="logout.php">Logout</a>
 				</h1>
+                
             </div>
             <!-- Nav -->
             <nav id="nav">
                 <ul>
                     <li><a href="home.php" id="top-link"><span class="icon fa-home">Home</span></a>
                     </li>
-                    <li><a href="map.php" id="portfolio-link"><span class="icon fa-map-marker">Map</span></a>
+                    <li><a href="map.php" id="portfolio-link"><span class="icon fa-map-marker">Location</span></a>
                     </li>
                     <li><a href="scrabble.php" id="about-link"><span class="icon fa-pencil">Scrabble</span></a>
                     </li>
@@ -307,10 +263,6 @@ if(!isset($_SESSION["sess_user"])){
                 </li>
                 <li><a href="#" class="icon fa-google-plus"><span class="label">Google Plus</span></a>
                 </li>
-              <!--   <li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a>
-                </li>
-                <li><a href="#" class="icon fa-envelope"><span class="label">Email</span></a>
-                </li> -->
             </ul>
         </div>
     </div>
@@ -320,140 +272,192 @@ if(!isset($_SESSION["sess_user"])){
         <section id="about" class="two">
             <div class="container">
                 <header>
-                    <h2>Scrabble</h2>
+                    <h2>Let's play!</h2>
                 </header>
-                <a href="#" class="image featured"><img src="images/logo.png" alt="" />
+                <a href="#" class="image featured">
+                    <img src="images/logo.png" alt="" />
                 </a>
-                <p>Form a word</p>
-                <div class="button-help"><a href="#openModal" id="modalLink"><span class="icon fa-question-circle"></span></a>
+
+                <p>Form a destination</p>
+                <div class="button-help">
+                    <a href="#openModal" id="modalLink">
+                        <span class="icon fa-question-circle"></span>
+                    </a>
                 </div>
             </div>
-			
-			
 			<div id="openModal" class="modalDialog">
-            <div>
-                <a href="#close" title="Close" class="close">X</a>
-                <h2 class="modal-title">Help</h2>
-                <div class="sample2">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lobortis gravida sodales. Aliquam at iaculis urna, in fringilla tortor. Phasellus porta velit at nisi dapibus tristique. Sed mattis neque at condimentum finibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi ut placerat ex. Aliquam erat volutpat. Ut sit amet volutpat magna. Phasellus mattis dictum eros gravida vulputate.
+                <div>
+                    <a href="#close" title="Close" class="close">X</a>
+                    <h2 class="modal-title">Help</h2>
+                    <div class="sample2">
+                        Combine the letters you have collected to form a name of a destination. 
+                        <br>
+                        If you are lucky you will win a trip to that place.
+                        <br>
+                        After submitting your destination, you lose the letters forming it. 
+
+                    </div>
                 </div>
             </div>
-        </div>
+
         <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
 		
 		
 		<br>
 		
 		<form action="" method="POST">
-			<!-- //get word -->
+			<!-- get word -->
 			<input type="hidden" id="words" name="words" value="dsdasda"/>
+            <!-- array of letters -->
+            <input type="hidden" id="arr" name="arr" value="jas sum niza"/>
 			<!-- kopce sto ja prakja destinacijata-->
 			<input type="submit" id="submit" name="submit" value="send the destination" onclick="sendDestination()" />
 		</form>
 			
+        <p class="p_lista" >Here's a list of your letters:</p>
+        <!-- ovie fiksni da se izbrisat -->
+        <div id="vrati" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div  class="draggable">L </div>
+            <div  class="draggable">O </div>
+            <div  class="draggable">N </div>
+            <div  class="draggable">D </div>
+            <div  class="draggable">O </div>
+            <div  class="draggable">N </div>
+            - se vrakaat posto se fiksni
+        </div>
+        <div id="vrati" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <?php 
+            $con=mysqli_connect('lean.mk','mktour@lean.mk','mktour123mktour!@','mktour'); 
+            if(!$con) echo "<br> umre konekcija";
+            else echo "<br> uspea konekcija <br>";
+            
+            //id na user-----------$idUser
+            $user =$_SESSION['sess_user'];
+                echo "user: ". $user;
+            $proverka_user = "select idKorisnik from Korisnik as k
+                              where k.username ='".$user."'";
+            $rez1 = $con->query($proverka_user);
+            while($row1 = $rez1->fetch_assoc()) {
+                $idUser = $row1["idKorisnik"];
+                echo "<br> idKorisnik: ". $idUser. "<br>";
+            }
+            
+            //selektiraj gi bukvite od ima_bukva
+            //cuvaj go i id-to od ima_bukva za posle da se brisat bukvite
+            $sql = "SELECT id_ima_bukva, bukva FROM ima_bukva as ima, Bukvi as b
+                    WHERE ima.idKorisnik = '".$idUser."'
+                    AND ima.idBukva = b.idBukvi";
+            $query=mysqli_query($con,$sql);
+            if(!$query) echo "<br> umre query <br>";
+            else echo "<br> uspea query <br>";
+
+            $rez = $con->query($sql);
+            if ($rez->num_rows > 0) {
+                while($row = $rez->fetch_assoc()) {
+                    $idImaBukva = $row["id_ima_bukva"]; 
+                    echo "<br> idImaBukva: ". $idImaBukva. " ";
+                    ?> 
+                    <div id="<?php echo $idImaBukva;?>" class="draggable"> 
+                        <?php echo " ".$row["bukva"]." ";?>
+                    </div>
+                    <?php
+                }
+            }
+            else {
+                echo "You don't have any letters yet!";
+            }
+            
+            
+            if(isset($_POST["submit"])){
+                
+                echo "<br>----- php po klik na kopceto -------<br>";
+                
+                //get word
+                if(!empty($_POST['words'])) {
+                    $word=$_POST['words'];
+                }
+                //echo $word;   
+                $destinacija = preg_replace('/\s/u', '', $word); 
+                echo "Formirana destinacija: ".$destinacija.".";
+                
+                $sql1 = "SELECT idDestinacija,destinacija FROM Destinacii
+                        WHERE destinacija='".$destinacija."'";
+                                
+                $query1=mysqli_query($con,$sql1);
+                if(!$query1) echo "<br> umre query <br>";
+                else echo "<br> uspea query <br>";
+            
+                $rez1 = $con->query($sql1);
+                if ($rez1->num_rows > 0) {
+                    while($row1 = $rez1->fetch_assoc()) {
+                        echo "<br> idDestinacija: ". $row1["idDestinacija"]. " - destinacija: ". $row1["destinacija"]. "<br>";
+                        $dest = $row1["destinacija"];
+                        echo "dest: ". $dest. "<br>";
+                        
+                        echo "Congratulations, you have won a trip in ".$destinacija."!";
+                    }   
+                }
+                else
+                {
+                    echo "<br>We're sorry, that destination doesn't exist in our database.";
+                }
+                
+                //stringot so id objektot vo ciklus podeli go po zapirki i da gi zacuvuva vo array
+                //pr. array(4,9) -> array[1]=9 
+                    //check
+
+                if(!empty($_POST['arr'])) {
+                    $arr=$_POST['arr'];
+                }
+                echo "<br>".$arr."<br>";
+                
+                $del = explode(",",$arr);
+                //$dani = $del['1'];
+                //echo "vtora bukva: ".$dani."<br>";
+
+                //dolu delete from ima_bukva where [for i=o do array.lengthi++ {id? = niza[i]}] 
+                //-vidi vo sql sintaksa za for
+                //ili sql da e vnatre vo for-ot - poverojatno!
+
+                $niza = array();
+                for ($i = 0; $i < sizeof($del); $i++)
+                {
+                    //echo "Bukvata ".$del[$i]." ima id vo ima_bukva ".$idImaBukva."<br>";
+                    $niza[] = $del[$i];
+                    // $sql_brisi =  query
+                    //probuvam cuda:
+                    $sql_id = "SELECT id_ima_bukva FROM ima_bukva as ima, Bukvi as b
+                                WHERE ima.idKorisnik = '".$idUser."'
+                                AND ima.idBukva = b.idBukvi
+                                AND b.bukva = '".$del[$i]."'";
+                    $query_id=mysqli_query($con,$sql_id);
+                    if(!$query_id) echo "<br> umre query <br>";
+                    else echo "<br> uspea query <br>";
+
+                    $rez_id = $con->query($sql_id);
+                    if ($rez_id->num_rows > 0) {
+                        while($row_id = $rez->fetch_assoc()) {
+                            $id = $row_id["id_ima_bukva"]; 
+                            echo "<br> idImaBukva: ". $id. " ";
+                            
+                        } // ????
+                    }
+                }
+                print_r($niza);
+
+
+                
+            }
+            
+            ?>
+        </div>
+
+
         </section>
-		<div id="vrati" ondrop="drop(event)" ondragover="allowDrop(event)">
-			<div id="drag1" class="draggable">L </div>
-			<div id="drag1" class="draggable">O </div>
-			<div id="drag1" class="draggable">N </div>
-			<div id="drag1" class="draggable">D </div>
-			<div id="drag1" class="draggable">O </div>
-			<div id="drag1" class="draggable">N </div>
-			- se vrakaat posto se fiksni
-		</div>
+		
 
         
-        <div id="vrati" ondrop="drop(event)" ondragover="allowDrop(event)">
-			<?php 
-			$con=mysqli_connect('lean.mk','mktour@lean.mk','mktour123mktour!@','mktour'); 
-			if(!$con) echo "<br> umre konekcija";
-			else echo "<br> uspea konekcija <br>";
-			
-			//id na user-----------$idUser
-			$user =$_SESSION['sess_user'];
-				echo "user: ". $user;
-			$proverka_user = "select idKorisnik from Korisnik as k
-							  where k.username ='".$user."'";
-			$rez1 = $con->query($proverka_user);
-			while($row1 = $rez1->fetch_assoc()) {
-				$idUser = $row1["idKorisnik"];
-				echo "<br> idKorisnik: ". $idUser. "<br>";
-			}
-			
-			//selektiraj gi bukvite od ima_bukva
-			$sql = "SELECT bukva FROM ima_bukva as ima, Bukvi as b
-					WHERE ima.idKorisnik = '".$idUser."'
-					AND ima.idBukva = b.idBukvi";
-			$query=mysqli_query($con,$sql);
-			if(!$query) echo "<br> umre query <br>";
-			else echo "<br> uspea query <br>";
-			
-			$rez = $con->query($sql);
-			if ($rez->num_rows > 0) {
-				while($row = $rez->fetch_assoc()) {
-					//$idImaBukva = $row["id?"]; //- id? treba da stoi vo select-ot - nez kako se vika atributot vo tabelata
-					//echo "<br> idImaBukva: ". $idImaBukva. "<br>";
-					//for vo js sto ke cita divovi
-					?> 
-					<div id="<?php echo $idImaBukva;?>" class="draggable"> 
-						<?php echo " ".$row["bukva"]." ";?>
-					</div>
-					<?php
-				}
-			}
-			else {
-				echo "You don't have any letters yet!";
-			}
-			
-			
-			if(isset($_POST["submit"])){
-				
-				echo "<br>----- php po klik na kopceto -------<br>";
-				
-				//stringot so id objektot vo ciklus podeli go po zapirki i da gi zacuvuva vo array
-				//pr. array(4,9) -> array[1]=9
-				//dolu delete from ima_bukva where [for i=o do array.lengthi++ {id? = niza[i]}] - vidi vo sql sintaksa za for
-				//ili sql da e vnatre vo for-ot
-				
-				//get word
-				if(!empty($_POST['words'])) {
-					$word=$_POST['words'];
-				}
-				//echo $word;	
-				$destinacija = preg_replace('/\s/u', '', $word); 
-				echo "Formirana destinacija: ".$destinacija.".";
-				
-				$sql1 = "SELECT idDestinacija,destinacija FROM Destinacii
-						WHERE destinacija='".$destinacija."'";
-								
-				$query1=mysqli_query($con,$sql1);
-				if(!$query1) echo "<br> umre query <br>";
-				else echo "<br> uspea query <br>";
-			
-				$rez1 = $con->query($sql1);
-				if ($rez1->num_rows > 0) {
-					while($row1 = $rez1->fetch_assoc()) {
-						echo "<br> idDestinacija: ". $row1["idDestinacija"]. " - destinacija: ". $row1["destinacija"]. "<br>";
-						$dest = $row1["destinacija"];
-						echo "dest: ". $dest. "<br>";
-						
-						echo "Congratulations, you have won a trip in ".$destinacija."!";
-					}	
-				}
-				else
-				{
-					echo "<br>We're sorry, that destination doesn't exist in our database.";
-				}
-				
-				//da se napravi delete na site bukvi koi go formiraat toa zborce
-				//poedinecno da se zacuvaat??
-				//delete vo ima_bukva where idBukva i idKorisnik($idUser)
-				
-				
-			}
-			
-			?>
-		</div>	
+        	
 		
 		
     </div>
@@ -506,13 +510,26 @@ function drop(ev) {
 var word;
 function sendDestination()
 {
-	// for da gi cita site divovi sto se vnatre i da gi zapise vo lista/niza/objekt so .textContext za da bide string
-	// prati go vo hidden field za da go prevzeme php od html
+	// for da gi cita id na divovite ($idImaBukva) ??
+    
 	word = document.getElementById("div1").textContent;
+    //word = document.getElementById("<?php echo $idImaBukva;?>").textContent; - nejke
     if (word){
-        //alert ( word);
+        alert ( word);
         //document.getElementById("words").innerHTML+=word;
 		document.getElementById("words").value = word;
+        var i;
+        var arr = [];
+        var spoeno;
+            spoeno = word.replace(/ /g,'');
+            alert(spoeno);
+        for(i=0; i<=spoeno.length; i++) {
+            arr.push(spoeno.charAt(i)); //deli go bukva po bukva
+        }
+        arr = arr.filter(Boolean); //trgni prazni elementi
+        //console.log(arr);
+        alert(arr);
+        document.getElementById("arr").value = arr;
     }
 	else
 	{

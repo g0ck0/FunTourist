@@ -10,7 +10,7 @@ if(!isset($_SESSION["sess_user"])){
 <html>
 
 <head>
-    <title>App</title>
+    <title>Fun tourist</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -194,7 +194,7 @@ if(!isset($_SESSION["sess_user"])){
         <div class="top">
             <!-- Logo -->
             <div id="logo">
-                <span class="image avatar48"><img src="images/travel.jpg" alt="" /></span>
+                <span class="image "><img src="images/travel.png" alt="" /></span>
                 <h1 id="title">
 					<span class="icon fa-user" style="margin-right:5px;"></span>
 					<?=$_SESSION['sess_user'];?> 
@@ -202,13 +202,14 @@ if(!isset($_SESSION["sess_user"])){
 					<br>
 					<a href="logout.php">Logout</a>
 				</h1>
+
             </div>
             <!-- Nav -->
             <nav id="nav">
                 <ul>
                     <li><a href="home.php" id="top-link"><span class="icon fa-home">Home</span></a>
                     </li>
-                    <li><a href="map.php" id="portfolio-link"><span class="icon fa-map-marker">Map</span></a>
+                    <li><a href="map.php" id="portfolio-link"><span class="icon fa-map-marker">Location</span></a>
                     </li>
                     <li><a href="scrabble.php" id="about-link"><span class="icon fa-pencil">Scrabble</span></a>
                     </li>
@@ -234,7 +235,7 @@ if(!isset($_SESSION["sess_user"])){
         <section id="portfolio" class="two">
             <div class="container">
                 <header>
-                    <h2>Map</h2>
+                    <h2>Let's start collecting letters!</h2>
                 </header>
 				
                 <!-- button za pozicioniranje
@@ -258,10 +259,6 @@ if(!isset($_SESSION["sess_user"])){
 				</form>
 				
 				<br>
-				
-				<?php
-				
-				?>
 				
 				<?php
 					if(isset($_POST["submit"])){
@@ -294,7 +291,7 @@ if(!isset($_SESSION["sess_user"])){
 						
 						//selektira bukva ako postoi na tie lat i long
 						//------------------------------------------
-						$sql = "SELECT bukva, lokacija FROM Bukvi as b, Lokacii as l
+						$sql = "SELECT bukva, lokacija, description FROM Bukvi as b, Lokacii as l
 								WHERE b.idBukvi = l.idBukva
 								AND l.latitude = '".$lat."'
 								AND l.longitude = '".$lon."'";
@@ -311,10 +308,16 @@ if(!isset($_SESSION["sess_user"])){
 						if ($rez->num_rows > 0) {
 							while($row = $rez->fetch_assoc()) {
 								//echo "<br> bukva: ". $row["bukva"]. " - lat: ". $row["lat"]. " " . $row["long"] . "<br>";
-								echo "<br> bukva: ". $row["bukva"]. " - lokacija: ". $row["lokacija"]. "<br>";
+								echo "<br> bukva: ". $row["bukva"]. " - lokacija: ". $row["lokacija"]. " - description: ". $row["description"]. "<br>";
 								$letter = $row["bukva"];
 								echo "letter: ". $letter. "<br>";
-																
+
+                                echo "<br> Congratulations! You have received the new letter: ". $letter . " !";
+
+                                //proveri go !!
+                                $description = $row["description"];
+								echo "description treba vo popup dialog: ". $description. "<br>";
+
 								//id na bukva ----------------------
 								$proverka_letter = "select idBukvi from Bukvi as b
 												  where b.bukva ='".$letter."'";
@@ -328,7 +331,7 @@ if(!isset($_SESSION["sess_user"])){
 								//----------------------------------
 								
 								//insert vo ima_bukva(tie bukvi se pojavuvaat vo scrabble)
-								
+								/*
 								$sql_insert = "insert into ima_bukva(idKorisnik,idBukva) 
 												values('$idUser','$idLetter')";
 								$insert = mysqli_query($con, $sql_insert);
@@ -339,7 +342,6 @@ if(!isset($_SESSION["sess_user"])){
 								else {
 									echo "<br> Fail";
 								}
-								echo "<br> Congratulations! You have received the new letter: ". $letter . " !";
 								
 								//----------------------------------------
 								
@@ -352,7 +354,7 @@ if(!isset($_SESSION["sess_user"])){
 								else {
 									echo "<br> Fail delete";
 								}
-								
+								*/
 								//-----------------------------------------------
 							}
 						} 
@@ -391,7 +393,9 @@ if(!isset($_SESSION["sess_user"])){
                     var marker = new google.maps.Marker({
                         position: pos,
                         map: map,
-                        title: 'Hello World!'
+                        title: 'You are here.',
+                        icon: 'images/icon.png'
+
                     });
                     map.setCenter(pos);
 					
@@ -401,10 +405,9 @@ if(!isset($_SESSION["sess_user"])){
 						type: 'POST',
 						url: 'index.php', 
 						async:false,
-						data: { lat: position.coords.latitude.toFixed(6) },
+						data: { lat: position.coords.latitude.toFixed(6) }, // ?? lon nemam it lives ??
 						complete: function(text){
 							//alert("success");
-							getLocation();
 							return text;
 							}
 					 });
