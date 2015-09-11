@@ -140,7 +140,7 @@ if(!isset($_SESSION["sess_user"])){
         padding-left: 10px;
         border: 1px solid #aaaaaa;
         border-radius: 7px;
-        min-width: 71%;
+        min-width: 55%;
         margin: 0 auto;
         margin-top: -80px;
         padding-bottom: 11px;
