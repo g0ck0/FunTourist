@@ -17,7 +17,7 @@ if(isset($_SESSION["sess_user"])){
 <html>
 
 <head>
-    <title>App</title>
+    <title>Fun tourist</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="css/styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -80,7 +80,7 @@ if(isset($_SESSION["sess_user"])){
 
 <body>
     <div class="splash fade-in">
-        <h1 class="splash-title fade-in">Explore Macedonia</h1>
+        <h1 class="splash-title fade-in">Fun tourist</h1>
 	
 		<br>
 		<form action="" method="POST">
