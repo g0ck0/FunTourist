@@ -397,9 +397,20 @@ if(!isset($_SESSION["sess_user"])){
                         icon: 'images/icon.png'
 
                     });
-                    map.setCenter(pos);
+                   map.setCenter(pos);
+			
+                var circle = new google.maps.Circle({
+                    map: map,
+                    radius: 50, 
+                    strokeColor:"#0000FF",
+                    strokeOpacity:0.4,
+                    strokeWeight:1.2,
+                    fillColor:"#0000FF",
+                    fillOpacity:0.2
+                });
+                    circle.bindTo('center', marker, 'position');
 					
-					document.getElementById("getlat").value = position.coords.latitude.toFixed(6);
+                    document.getElementById("getlat").value = position.coords.latitude.toFixed(6);
 					document.getElementById("getlon").value = position.coords.longitude.toFixed(6);
 					 $.ajax({  
 						type: 'POST',
@@ -422,6 +433,11 @@ if(!isset($_SESSION["sess_user"])){
             }
         }
 		
+        function pointInCircle(point, 50, center)
+        {
+            return (google.maps.geometry.spherical.computeDistanceBetween(point, center) <= 50)
+        }
+
         function handleNoGeolocation(errorFlag) {
             if (errorFlag) {
                 var content = 'Error: The Geolocation service failed.';
