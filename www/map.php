@@ -14,17 +14,17 @@ if(!isset($_SESSION["sess_user"])){
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
-    <!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+    <!--za templejtot na stranata-->
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.scrolly.min.js"></script>
     <script src="js/jquery.scrollzer.min.js"></script>
     <script src="js/skel.min.js"></script>
     <script src="js/skel-layers.min.js"></script>
     <script src="js/init.js"></script>
-    <script src="http://maps.googleapis.com/maps/api/js"></script>
-    <script type="text/javascript" src="cordova.js"></script>
+    
     <script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript" src="js/materialize.js"></script>
+    <!--za mapata-->
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
     <script type="text/javascript">
     app.initialize();
     </script>
@@ -35,8 +35,7 @@ if(!isset($_SESSION["sess_user"])){
         <link href="css/modal.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/material.css">
     </noscript>
-    <!--[if lte IE 9]><link rel="stylesheet" href="css/ie/v9.css" /><![endif]-->
-    <!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+
     <style>
     #mapPlaceholder {
         height: 300px;
@@ -397,20 +396,9 @@ if(!isset($_SESSION["sess_user"])){
                         icon: 'images/icon.png'
 
                     });
-                   map.setCenter(pos);
-			
-                var circle = new google.maps.Circle({
-                    map: map,
-                    radius: 50, 
-                    strokeColor:"#0000FF",
-                    strokeOpacity:0.4,
-                    strokeWeight:1.2,
-                    fillColor:"#0000FF",
-                    fillOpacity:0.2
-                });
-                    circle.bindTo('center', marker, 'position');
+                    map.setCenter(pos);
 					
-                    document.getElementById("getlat").value = position.coords.latitude.toFixed(6);
+					document.getElementById("getlat").value = position.coords.latitude.toFixed(6);
 					document.getElementById("getlon").value = position.coords.longitude.toFixed(6);
 					 $.ajax({  
 						type: 'POST',
@@ -433,11 +421,6 @@ if(!isset($_SESSION["sess_user"])){
             }
         }
 		
-        function pointInCircle(point, 50, center)
-        {
-            return (google.maps.geometry.spherical.computeDistanceBetween(point, center) <= 50)
-        }
-
         function handleNoGeolocation(errorFlag) {
             if (errorFlag) {
                 var content = 'Error: The Geolocation service failed.';

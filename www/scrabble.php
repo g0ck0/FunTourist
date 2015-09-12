@@ -357,7 +357,7 @@ if(!isset($_SESSION["sess_user"])){
                     $idImaBukva = $row["id_ima_bukva"]; 
                     echo "<br> idImaBukva: ". $idImaBukva. " ";
                     ?> 
-                    <div id="<?php echo $idImaBukva;?>" class="draggable"> 
+                    <div id="<?php echo $idImaBukva;?>" draggable="true" ondragstart="drag(event)" class="draggable" > 
                         <?php echo " ".$row["bukva"]." ";?>
                     </div>
                     <?php
@@ -498,7 +498,7 @@ function allowDrop(ev) {
 }
 function drag(ev) {
     ev.dataTransfer.setData("Text", ev.target.id);
-    console.log('targetid: ' + ev.target.id);
+    //console.log('targetid: ' + ev.target.id);
 }
 function drop(ev) {
     ev.preventDefault();
