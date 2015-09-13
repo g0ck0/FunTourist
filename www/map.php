@@ -153,7 +153,6 @@ if(!isset($_SESSION["sess_user"])){
         float: right;
         position: relative;
         border-radius: 50%;
-        /* border: 2px solid #CCCCCD; */
         top: 229px;
         box-shadow: 3px 3px 6px 0px #515151;
     }
@@ -237,8 +236,7 @@ if(!isset($_SESSION["sess_user"])){
                     <h2 style="margin-top:10%"><strong>Let's start collecting letters!</strong></h2>
                 </header>
 				
-                <!-- button za pozicioniranje
-				<button onclick="initialize()" class="btn-class">Location</button>-->
+                <!-- button za pozicioniranje -->
                 <div class="btn-class" onclick="initialize()">
                     <div id="btn-class">
                         <i class="fa fa-map-marker"></i>
@@ -256,9 +254,10 @@ if(!isset($_SESSION["sess_user"])){
 					<!-- button za proverka na bukva -->
 					<input type="submit" id="submit" name="submit" value="check for letter"/>
 				</form>
-				<!--<input type="button" value="stisni" onclick="arePointsNear(42.017400,21.444584,42.017172,21.444594)"/>-->
 				<br>
 				
+                <div id="echos"></div>
+
 				<?php
                     if(isset($_POST["submit"])){
 						//lat i lon zima od pozicija
@@ -399,25 +398,12 @@ if(!isset($_SESSION["sess_user"])){
                                             $sql_insert = "insert into ima_bukva(idKorisnik,idBukva) 
                                                             values('$idUser','$idLetter')";
                                             $insert = mysqli_query($con, $sql_insert);
-                                            if($insert) {
-                                                echo "<br> Success insert";
-                                            }
-                                            else {
-                                                echo "<br> Fail insert";
-                                            }
                                             
                                             //delete na lokacijata vo Lokacii otkako ke ja zeme bukvata
                                             $sql_delete = "delete from Lokacii where longitude = '".$dblon."' and latitude = '".$dblat."'";
                                             $delete = mysqli_query($con, $sql_delete);
-                                            if($delete) {
-                                                echo "<br> Success delete";
-                                            }
-                                            else {
-                                                echo "<br> Fail delete";
-                                            }
-
+                                            
                                         }
-
                                     }//tuka zavrsuva dodeluvanjeto na bukva
                                     $promenliva = 1;
                                 }//tuka zavrsuva if distance <=50   
@@ -428,13 +414,11 @@ if(!isset($_SESSION["sess_user"])){
 
                             }//tuka zavrsuva while sto gi vrti site redici
                             if($promenliva == 0) {
-                                echo "<br> Sorry, there is no letter on that location. <br>";
                                 //naoga najmala distanca i nasoka kon taa lokacija:
                                 $lowest = min($a);
                                 $indeks = array_search($lowest, $a);
                                 $nas = $b[$indeks];
-                                
-                                echo "You can find a letter around ".$lowest." meters ".$nas." from your location. <br>";
+                                echo "<br> Sorry, there is no letter on that location. <br> You can find a letter around ".$lowest." meters ".$nas." from your location. <br>";
                             }
                             
                         }
@@ -480,16 +464,7 @@ if(!isset($_SESSION["sess_user"])){
 					
 					document.getElementById("getlat").value = position.coords.latitude.toFixed(6);
 					document.getElementById("getlon").value = position.coords.longitude.toFixed(6);
-					 $.ajax({  
-						type: 'POST',
-						url: 'index.php', 
-						async:false,
-						data: { lat: position.coords.latitude.toFixed(6) }, // ?? lon nemam it lives ??
-						complete: function(text){
-							//alert("success");
-							return text;
-							}
-					 });
+					 
                 }, function() {
                     handleNoGeolocation(true);
                 });
@@ -500,21 +475,6 @@ if(!isset($_SESSION["sess_user"])){
                 handleNoGeolocation(false);
             }
         }
-        /*
-		function arePointsNear(point1, point2,point3,point4) {
-			var sw = new google.maps.LatLng(point3 - 0.0002, point4 - 0.0002);
-			var ne = new google.maps.LatLng(point3 + 0.0002, point4 + 0.0002);		
-			
-			var bounds = new google.maps.LatLngBounds(sw, ne);
-			
-			var celo = new google.maps.LatLng( point1, point2 );
-			
-			if (bounds.contains(celo))
-				alert("true");
-			else
-				alert("false");
-		}
-		*/
         function handleNoGeolocation(errorFlag) {
             if (errorFlag) {
                 var content = 'Error: The Geolocation service failed.';
