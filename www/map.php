@@ -256,7 +256,7 @@ if(!isset($_SESSION["sess_user"])){
 					<!-- button za proverka na bukva -->
 					<input type="submit" id="submit" name="submit" value="check for letter"/>
 				</form>
-				
+				<input type="button" value="stisni" onclick="arePointsNear(42.017400,21.444584,42.017172,21.444594)"/>
 				<br>
 				
 				<?php
@@ -286,7 +286,25 @@ if(!isset($_SESSION["sess_user"])){
 							}
 						}
 						//----------------------------------------
-						
+						function distance($lat1, $lon1, $lat2, $lon2, $unit) {
+
+						  $theta = $lon1 - $lon2;
+						  $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+						  $dist = acos($dist);
+						  $dist = rad2deg($dist);
+						  $miles = $dist * 60 * 1.1515;
+						  $unit = strtoupper($unit);
+
+						  if ($unit == "K") {
+							return ($miles * 1609.34);
+						  } 
+						  else {
+							return $miles;
+						  }
+						}
+
+						echo distance(42.017400,21.444584,42.017172,21.444594, "M") . " Miles<br>";
+						echo distance(42.017400,21.444584,42.017172,21.444594, "K") . " Meters<br>";
 						
 						//selektira bukva ako postoi na tie lat i long
 						//------------------------------------------
@@ -420,6 +438,19 @@ if(!isset($_SESSION["sess_user"])){
                 handleNoGeolocation(false);
             }
         }
+		function arePointsNear(point1, point2,point3,point4) {
+			var sw = new google.maps.LatLng(point3 - 0.0002, point4 - 0.0002);
+			var ne = new google.maps.LatLng(point3 + 0.0002, point4 + 0.0002);		
+			
+			var bounds = new google.maps.LatLngBounds(sw, ne);
+			
+			var celo = new google.maps.LatLng( point1, point2 );
+			
+			if (bounds.contains(celo))
+				alert("true");
+			else
+				alert("false");
+		}
 		
         function handleNoGeolocation(errorFlag) {
             if (errorFlag) {
