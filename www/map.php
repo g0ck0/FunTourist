@@ -267,13 +267,13 @@ if(!isset($_SESSION["sess_user"])){
 							$lon=$_POST['getlon'];
 						}
 						
-						//konektira na baza ------------------
+						//konektira na baza 
 						$con=mysqli_connect('lean.mk','mktour@lean.mk','mktour123mktour!@','mktour'); 
 						if ($con->connect_error) {
                             die("Connection failed: " . $con->connect_error);
                         } 
 						
-						//id na user --------------------------
+						//id na user 
 						$user =$_SESSION['sess_user'];
 						
 						$proverka_user = "select idKorisnik from Korisnik as k
@@ -356,6 +356,7 @@ if(!isset($_SESSION["sess_user"])){
                         if ($r->num_rows > 0) {
                             $a = array();
                             $b = array();
+                            $promenliva = 0;
 
                             while($ro = $r->fetch_assoc()) {
                                 $dblat = $ro["latitude"];
@@ -395,7 +396,7 @@ if(!isset($_SESSION["sess_user"])){
                                             } 
                                             
                                             //insert vo ima_bukva(tie bukvi se pojavuvaat vo scrabble)
-                                            /*$sql_insert = "insert into ima_bukva(idKorisnik,idBukva) 
+                                            $sql_insert = "insert into ima_bukva(idKorisnik,idBukva) 
                                                             values('$idUser','$idLetter')";
                                             $insert = mysqli_query($con, $sql_insert);
                                             if($insert) {
@@ -403,37 +404,42 @@ if(!isset($_SESSION["sess_user"])){
                                             }
                                             else {
                                                 echo "<br> Fail insert";
-                                            }*/
+                                            }
                                             
                                             //delete na lokacijata vo Lokacii otkako ke ja zeme bukvata
-                                            /*$sql_delete = "delete from Lokacii where longitude = '".$dblon."' and latitude = '".$dblat."'";
+                                            $sql_delete = "delete from Lokacii where longitude = '".$dblon."' and latitude = '".$dblat."'";
                                             $delete = mysqli_query($con, $sql_delete);
                                             if($delete) {
                                                 echo "<br> Success delete";
                                             }
                                             else {
                                                 echo "<br> Fail delete";
-                                            }*/
+                                            }
 
                                         }
-                                    } 
+
+                                    }//tuka zavrsuva dodeluvanjeto na bukva
+                                    $promenliva = 1;
                                 }//tuka zavrsuva if distance <=50   
                                 else {
                                     array_push($a, round($oddalecenost));
                                     array_push($b, $nasoka);
                                 }
-                            }//tuka zavrsuva while sto gi vrti site redici
 
-                            echo "<br> Sorry, there is no letter on that location. <br>";
-                            //naoga najmala distanca i nasoka kon taa lokacija:
-                            $lowest = min($a);
-                            $indeks = array_search($lowest, $a);
-                            $nas = $b[$indeks];
+                            }//tuka zavrsuva while sto gi vrti site redici
+                            if($promenliva == 0) {
+                                echo "<br> Sorry, there is no letter on that location. <br>";
+                                //naoga najmala distanca i nasoka kon taa lokacija:
+                                $lowest = min($a);
+                                $indeks = array_search($lowest, $a);
+                                $nas = $b[$indeks];
+                                
+                                echo "You can find a letter around ".$lowest." meters ".$nas." from your location. <br>";
+                            }
                             
-                            echo "You can find a letter around ".$lowest." meters ".$nas." from your location. <br>";
                         }
                         else {
-                            echo "<br> Sorry, there is no letter on that location.";
+                            echo "<br> You can't find any letters at this time.";
 
                         }
                         $con->close();
