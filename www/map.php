@@ -296,15 +296,76 @@ if(!isset($_SESSION["sess_user"])){
 							return ($miles * 1609.34);
 						}
 
+                        function getCompassDirection($bearing) {
+                                     $tmp = round($bearing / 22.5);
+                                     switch($tmp) {
+                                          case 1:
+                                               $direction = "NNE";
+                                               break;
+                                          case 2:
+                                               $direction = "NE";
+                                               break;
+                                          case 3:
+                                               $direction = "ENE";
+                                               break;
+                                          case 4:
+                                               $direction = "E";
+                                               break;
+                                          case 5:
+                                               $direction = "ESE";
+                                               break;
+                                          case 6:
+                                               $direction = "SE";
+                                               break;
+                                          case 7:
+                                               $direction = "SSE";
+                                               break;
+                                          case 8:
+                                               $direction = "S";
+                                               break;
+                                          case 9:
+                                               $direction = "SSW";
+                                               break;
+                                          case 10:
+                                               $direction = "SW";
+                                               break;
+                                          case 11:
+                                               $direction = "WSW";
+                                               break;
+                                          case 12:
+                                               $direction = "W";
+                                               break;
+                                          case 13:
+                                               $direction = "WNW";
+                                               break;
+                                          case 14:
+                                               $direction = "NW";
+                                               break;
+                                          case 15:
+                                               $direction = "NNW";
+                                               break;
+                                          default:
+                                               $direction = "N";
+                                     }
+                                     return $direction;
+                                }
+
                         //lat i lon zima od baza
                         $s = "SELECT latitude, longitude FROM Lokacii";
                         $r = $con->query($s);
                         if ($r->num_rows > 0) {
                             $a = array();
+                            $b = array();
+
                             while($ro = $r->fetch_assoc()) {
                                 $dblat = $ro["latitude"];
                                 $dblon = $ro["longitude"];
                                 $oddalecenost = distance($lat,$lon,$dblat,$dblon);
+
+                                //direction
+                                $bearing = (rad2deg(atan2(sin(deg2rad($dblon) - deg2rad($lon)) * cos(deg2rad($dblat)), cos(deg2rad($lat)) * sin(deg2rad($dblat)) - sin(deg2rad($lat)) * cos(deg2rad($dblat)) * cos(deg2rad($dblon) - deg2rad($lon)))) + 360) % 360;
+                                $nasoka = getCompassDirection($bearing);
+                                //echo $oddalecenost. " - ".$nasoka. "<br>";
 
                                 if ($oddalecenost <=50) {
                                     //selektira bukva ako postoi na tie lat i long
@@ -358,14 +419,18 @@ if(!isset($_SESSION["sess_user"])){
                                     } 
                                 }//tuka zavrsuva if distance <=50   
                                 else {
-                                    array_push($a, $oddalecenost);
+                                    array_push($a, round($oddalecenost));
+                                    array_push($b, $nasoka);
                                 }
                             }//tuka zavrsuva while sto gi vrti site redici
-                            echo "<br> Sorry, there is no letter on that location. <br>";
-                            //naoga najmala vrednost:
-                            $lowest = round(min($a));
-                            echo "You can find a letter around ".$lowest. " meters from your location. <br>";
 
+                            echo "<br> Sorry, there is no letter on that location. <br>";
+                            //naoga najmala distanca i nasoka kon taa lokacija:
+                            $lowest = min($a);
+                            $indeks = array_search($lowest, $a);
+                            $nas = $b[$indeks];
+                            
+                            echo "You can find a letter around ".$lowest." meters ".$nas." from your location. <br>";
                         }
                         else {
                             echo "<br> Sorry, there is no letter on that location.";
