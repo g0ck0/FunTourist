@@ -260,19 +260,8 @@ if(!isset($_SESSION["sess_user"])){
 				<br>
 				
 				<?php
-                /*
-                $con=mysqli_connect('lean.mk','mktour@lean.mk','mktour123mktour!@','mktour'); 
-                $s = "SELECT lat, lon FROM Lokacii";
-                        $r = $con->query($s);
-                        if ($r->num_rows > 0) {
-                            while($ro = $r->fetch_assoc()) {
-                                echo $ro["lat"]. "<br>";
-                                echo $ro["lat"]. "<br>";
-                            }
-                        }
-                */
-					if(isset($_POST["submit"])){
-						//get lat/lon
+                    if(isset($_POST["submit"])){
+						//lat i lon zima od pozicija
 						if(!empty($_POST['getlat']) && !empty($_POST['getlon'])) {
 							$lat=$_POST['getlat'];
 							$lon=$_POST['getlon'];
@@ -280,118 +269,105 @@ if(!isset($_SESSION["sess_user"])){
 						
 						//konektira na baza ------------------
 						$con=mysqli_connect('lean.mk','mktour@lean.mk','mktour123mktour!@','mktour'); 
-						if(!$con) echo "<br> umre konekcija";
-						else echo "<br> uspea konekcija <br>";
+						if ($conn->connect_error) {
+                            die("Connection failed: " . $conn->connect_error);
+                        } 
 						
 						//id na user --------------------------
 						$user =$_SESSION['sess_user'];
-						echo "user: ". $user;
 						
 						$proverka_user = "select idKorisnik from Korisnik as k
 										  where k.username ='".$user."'";
 						$rez1 = $con->query($proverka_user);
 						if ($rez1->num_rows > 0) {
 							while($row1 = $rez1->fetch_assoc()) {
-								echo "<br> idKorisnik: ". $row1["idKorisnik"]. "<br>";
 								$idUser = $row1["idKorisnik"];
 							}
 						}
-						//----------------------------------------
-						function distance($lat1, $lon1, $lat2, $lon2, $unit) {
+
+						//oddalecenost od 50m ----------------------------
+						function distance($lat1, $lon1, $lat2, $lon2) {
 
 						  $theta = $lon1 - $lon2;
 						  $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
 						  $dist = acos($dist);
 						  $dist = rad2deg($dist);
 						  $miles = $dist * 60 * 1.1515;
-						  $unit = strtoupper($unit);
-
-						  if ($unit == "K") {
 							return ($miles * 1609.34);
-						  } 
-						  else {
-							return $miles;
-						  }
 						}
 
-						echo distance(42.017400,21.444584,42.017172,21.444594, "M") . " Miles<br>";
-						echo distance(42.017400,21.444584,42.017172,21.444594, "K") . " Meters<br>";
-						
-						//selektira bukva ako postoi na tie lat i long
-						//------------------------------------------
-						$sql = "SELECT bukva, lokacija, description FROM Bukvi as b, Lokacii as l
-								WHERE b.idBukvi = l.idBukva
-								AND l.latitude = '".$lat."'
-								AND l.longitude = '".$lon."'";
-								
-						$query=mysqli_query($con,$sql);
-						if(!$query) echo "<br> umre query <br>";
-						else echo "<br> uspea query <br>";
-						
-						echo $lat;
-						echo "&nbsp;";
-						echo $lon;
-						
-						$rez = $con->query($sql);
-						if ($rez->num_rows > 0) {
-							while($row = $rez->fetch_assoc()) {
-								//echo "<br> bukva: ". $row["bukva"]. " - lat: ". $row["lat"]. " " . $row["long"] . "<br>";
-								echo "<br> bukva: ". $row["bukva"]. " - lokacija: ". $row["lokacija"]. " - description: ". $row["description"]. "<br>";
-								$letter = $row["bukva"];
-								echo "letter: ". $letter. "<br>";
-                                echo "<br> Congratulations! You have received the new letter: ". $letter . " !";
+                        //lat i lon zima od baza
+                        $s = "SELECT latitude, longitude FROM Lokacii";
+                        $r = $con->query($s);
+                        if ($r->num_rows > 0) {
+                            while($ro = $r->fetch_assoc()) {
+                                $dblat = $ro["latitude"];
+                                $dblon = $ro["longitude"];
+                                $oddalecenost = distance($lat,$lon,$dblat,$dblon);
+                                if ($oddalecenost <=50) {
+                                    //selektira bukva ako postoi na tie lat i long
+                                    $sql = "SELECT bukva, lokacija, description FROM Bukvi as b, Lokacii as l
+                                            WHERE b.idBukvi = l.idBukva
+                                            AND l.latitude = '".$dblat."'
+                                            AND l.longitude = '".$dblon."'";
 
-                                //proveri go ?? 
-                                $description = $row["description"];
-								echo "description treba vo popup dialog: ". $description. "<br>";
+                                    $query=mysqli_query($con,$sql);
+                                    $rez = $con->query($sql);
+                                    if ($rez->num_rows > 0) {
+                                        while($row = $rez->fetch_assoc()) {
+                                            $letter = $row["bukva"];
+                                            echo "<br> Congratulations! You have received the new letter: ". $letter . " !";
 
-								//id na bukva ----------------------
-								$proverka_letter = "select idBukvi from Bukvi as b
-												  where b.bukva ='".$letter."'";
-								$rez2 = $con->query($proverka_letter);
-								if ($rez2->num_rows > 0) {
-									while($row2 = $rez2->fetch_assoc()) {
-										echo "<br> idBukva: ". $row2["idBukvi"]. "<br>";
-										$idLetter = $row2["idBukvi"];
-									}
-								} 
-								//----------------------------------
-								
-								//insert vo ima_bukva(tie bukvi se pojavuvaat vo scrabble)
-								/*
-								$sql_insert = "insert into ima_bukva(idKorisnik,idBukva) 
-												values('$idUser','$idLetter')";
-								$insert = mysqli_query($con, $sql_insert);
-								echo "<br> Vo insert vleguva: idKorisnik: ".$idUser,", idBukvi: ".$idLetter;
-								if($insert) {
-									echo "<br> Success";
-								}
-								else {
-									echo "<br> Fail";
-								}
-								
-								//----------------------------------------
-								
-								//delete na lokacijata vo Lokacii otkako ke ja zeme bukvata
-								$sql_delete = "delete from Lokacii where longitude = '".$lon."' and latitude = '".$lat."'";
-								$delete = mysqli_query($con, $sql_delete);
-								if($delete) {
-									echo "<br> Success delete";
-								}
-								else {
-									echo "<br> Fail delete";
-								}
-								*/
-								//-----------------------------------------------
-							}
-						} 
-						else {
-							echo "<br> Sorry, there is no letter on that location.";
-						}
-						//----------------------------------
-						
-						$con->close();					
-					}
+                                            $description = $row["description"];
+                                            echo "<br>". $description. "<br>";
+
+                                            //id na bukva ----------------------
+                                            $proverka_letter = "select idBukvi from Bukvi as b
+                                                              where b.bukva ='".$letter."'";
+                                            $rez2 = $con->query($proverka_letter);
+                                            if ($rez2->num_rows > 0) {
+                                                while($row2 = $rez2->fetch_assoc()) {
+                                                    echo "<br> idBukva: ". $row2["idBukvi"]. "<br>";
+                                                    $idLetter = $row2["idBukvi"];
+                                                }
+                                            } 
+                                            
+                                            //insert vo ima_bukva(tie bukvi se pojavuvaat vo scrabble)
+                                            /*
+                                            $sql_insert = "insert into ima_bukva(idKorisnik,idBukva) 
+                                                            values('$idUser','$idLetter')";
+                                            $insert = mysqli_query($con, $sql_insert);
+                                            echo "<br> Vo insert vleguva: idKorisnik: ".$idUser,", idBukvi: ".$idLetter;
+                                            if($insert) {
+                                                echo "<br> Success";
+                                            }
+                                            else {
+                                                echo "<br> Fail";
+                                            }
+                                            
+                                            //delete na lokacijata vo Lokacii otkako ke ja zeme bukvata
+                                            $sql_delete = "delete from Lokacii where longitude = '".$lon."' and latitude = '".$lat."'";
+                                            $delete = mysqli_query($con, $sql_delete);
+                                            if($delete) {
+                                                echo "<br> Success delete";
+                                            }
+                                            else {
+                                                echo "<br> Fail delete";
+                                            }
+                                            */
+                                            //-----------------------------------------------
+                                        }
+                                    } 
+                                
+                                    $con->close();
+                                }
+                                else {
+                                    echo "<br> Sorry, there is no letter on that location.";
+                                }
+                            }
+                        
+
+
 				?>
 				
 				
