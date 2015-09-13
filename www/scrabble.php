@@ -272,7 +272,7 @@ if(!isset($_SESSION["sess_user"])){
         <section id="about" class="two">
             <div class="container">
                 <header>
-                    <h2>Let's play!</h2>
+                    <h2 style="margin-top:10%"><strong>Let's play!</strong></h2>
                 </header>
                 <a href="#" class="image featured">
                     <img src="images/logo.png" alt="" />

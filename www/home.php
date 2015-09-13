@@ -72,11 +72,12 @@ if(!isset($_SESSION["sess_user"])){
         <section id="top" class="one dark cover">
             <div class="container">
                 <header>
-                    <h2 class="alt">Fun Tourist</h2>
+                    <h2 class="alt" style="margin-top:10%"><strong>Fun Tourist</strong></h2>
                 </header>
             </div>
-            <p style="width: 100%; margin-top: 126px; font-size: 22px; font-family: 'Source Sans Pro', sans-serif; letter-spacing: 1px;">
-                Travel, visit new places and through game and fun, win a trip of your choice!</p>
+            <p style="width: 100%; margin-top: 25%; font-size: 22px; font-family: 'Source Sans Pro', sans-serif; letter-spacing: 1px;">
+                Travel, visit new places and through game and fun, win a trip of your choice!
+            </p>
         </section>
     </div>
 </body>

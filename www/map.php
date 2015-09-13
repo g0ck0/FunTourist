@@ -234,7 +234,7 @@ if(!isset($_SESSION["sess_user"])){
         <section id="portfolio" class="two">
             <div class="container">
                 <header>
-                    <h2>Let's start collecting letters!</h2>
+                    <h2 style="margin-top:10%"><strong>Let's start collecting letters!</strong></h2>
                 </header>
 				
                 <!-- button za pozicioniranje
@@ -256,10 +256,21 @@ if(!isset($_SESSION["sess_user"])){
 					<!-- button za proverka na bukva -->
 					<input type="submit" id="submit" name="submit" value="check for letter"/>
 				</form>
-				<input type="button" value="stisni" onclick="arePointsNear(42.017400,21.444584,42.017172,21.444594)"/>
+				<!--<input type="button" value="stisni" onclick="arePointsNear(42.017400,21.444584,42.017172,21.444594)"/>-->
 				<br>
 				
 				<?php
+                /*
+                $con=mysqli_connect('lean.mk','mktour@lean.mk','mktour123mktour!@','mktour'); 
+                $s = "SELECT lat, lon FROM Lokacii";
+                        $r = $con->query($s);
+                        if ($r->num_rows > 0) {
+                            while($ro = $r->fetch_assoc()) {
+                                echo $ro["lat"]. "<br>";
+                                echo $ro["lat"]. "<br>";
+                            }
+                        }
+                */
 					if(isset($_POST["submit"])){
 						//get lat/lon
 						if(!empty($_POST['getlat']) && !empty($_POST['getlon'])) {
@@ -328,10 +339,9 @@ if(!isset($_SESSION["sess_user"])){
 								echo "<br> bukva: ". $row["bukva"]. " - lokacija: ". $row["lokacija"]. " - description: ". $row["description"]. "<br>";
 								$letter = $row["bukva"];
 								echo "letter: ". $letter. "<br>";
-
                                 echo "<br> Congratulations! You have received the new letter: ". $letter . " !";
 
-                                //proveri go !!
+                                //proveri go ?? 
                                 $description = $row["description"];
 								echo "description treba vo popup dialog: ". $description. "<br>";
 
@@ -411,7 +421,7 @@ if(!isset($_SESSION["sess_user"])){
                         position: pos,
                         map: map,
                         title: 'You are here.',
-                        icon: 'images/icon.png'
+                        icon: 'images/marker.png'
 
                     });
                     map.setCenter(pos);
@@ -438,6 +448,7 @@ if(!isset($_SESSION["sess_user"])){
                 handleNoGeolocation(false);
             }
         }
+        /*
 		function arePointsNear(point1, point2,point3,point4) {
 			var sw = new google.maps.LatLng(point3 - 0.0002, point4 - 0.0002);
 			var ne = new google.maps.LatLng(point3 + 0.0002, point4 + 0.0002);		
@@ -451,7 +462,7 @@ if(!isset($_SESSION["sess_user"])){
 			else
 				alert("false");
 		}
-		
+		*/
         function handleNoGeolocation(errorFlag) {
             if (errorFlag) {
                 var content = 'Error: The Geolocation service failed.';
