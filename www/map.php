@@ -269,8 +269,8 @@ if(!isset($_SESSION["sess_user"])){
 						
 						//konektira na baza ------------------
 						$con=mysqli_connect('lean.mk','mktour@lean.mk','mktour123mktour!@','mktour'); 
-						if ($conn->connect_error) {
-                            die("Connection failed: " . $conn->connect_error);
+						if ($con->connect_error) {
+                            die("Connection failed: " . $con->connect_error);
                         } 
 						
 						//id na user --------------------------
@@ -285,7 +285,7 @@ if(!isset($_SESSION["sess_user"])){
 							}
 						}
 
-						//oddalecenost od 50m ----------------------------
+						//oddalecenost od 50m 
 						function distance($lat1, $lon1, $lat2, $lon2) {
 
 						  $theta = $lon1 - $lon2;
@@ -300,10 +300,12 @@ if(!isset($_SESSION["sess_user"])){
                         $s = "SELECT latitude, longitude FROM Lokacii";
                         $r = $con->query($s);
                         if ($r->num_rows > 0) {
+                            $a = array();
                             while($ro = $r->fetch_assoc()) {
                                 $dblat = $ro["latitude"];
                                 $dblon = $ro["longitude"];
                                 $oddalecenost = distance($lat,$lon,$dblat,$dblon);
+
                                 if ($oddalecenost <=50) {
                                     //selektira bukva ako postoi na tie lat i long
                                     $sql = "SELECT bukva, lokacija, description FROM Bukvi as b, Lokacii as l
@@ -316,58 +318,61 @@ if(!isset($_SESSION["sess_user"])){
                                     if ($rez->num_rows > 0) {
                                         while($row = $rez->fetch_assoc()) {
                                             $letter = $row["bukva"];
-                                            echo "<br> Congratulations! You have received the new letter: ". $letter . " !";
+                                            echo "<br> Congratulations! <br> You have received the new letter: ". $letter . " ! <br> Your letter has been stored in Scrabble.";
 
                                             $description = $row["description"];
                                             echo "<br>". $description. "<br>";
 
-                                            //id na bukva ----------------------
+                                            //id na bukva 
                                             $proverka_letter = "select idBukvi from Bukvi as b
                                                               where b.bukva ='".$letter."'";
                                             $rez2 = $con->query($proverka_letter);
                                             if ($rez2->num_rows > 0) {
                                                 while($row2 = $rez2->fetch_assoc()) {
-                                                    echo "<br> idBukva: ". $row2["idBukvi"]. "<br>";
                                                     $idLetter = $row2["idBukvi"];
                                                 }
                                             } 
                                             
                                             //insert vo ima_bukva(tie bukvi se pojavuvaat vo scrabble)
-                                            /*
-                                            $sql_insert = "insert into ima_bukva(idKorisnik,idBukva) 
+                                            /*$sql_insert = "insert into ima_bukva(idKorisnik,idBukva) 
                                                             values('$idUser','$idLetter')";
                                             $insert = mysqli_query($con, $sql_insert);
-                                            echo "<br> Vo insert vleguva: idKorisnik: ".$idUser,", idBukvi: ".$idLetter;
                                             if($insert) {
-                                                echo "<br> Success";
+                                                echo "<br> Success insert";
                                             }
                                             else {
-                                                echo "<br> Fail";
-                                            }
+                                                echo "<br> Fail insert";
+                                            }*/
                                             
                                             //delete na lokacijata vo Lokacii otkako ke ja zeme bukvata
-                                            $sql_delete = "delete from Lokacii where longitude = '".$lon."' and latitude = '".$lat."'";
+                                            /*$sql_delete = "delete from Lokacii where longitude = '".$dblon."' and latitude = '".$dblat."'";
                                             $delete = mysqli_query($con, $sql_delete);
                                             if($delete) {
                                                 echo "<br> Success delete";
                                             }
                                             else {
                                                 echo "<br> Fail delete";
-                                            }
-                                            */
-                                            //-----------------------------------------------
+                                            }*/
+
                                         }
                                     } 
-                                
-                                    $con->close();
-                                }
+                                }//tuka zavrsuva if distance <=50   
                                 else {
-                                    echo "<br> Sorry, there is no letter on that location.";
+                                    array_push($a, $oddalecenost);
                                 }
-                            }
-                        
+                            }//tuka zavrsuva while sto gi vrti site redici
+                            echo "<br> Sorry, there is no letter on that location. <br>";
+                            //naoga najmala vrednost:
+                            $lowest = round(min($a));
+                            echo "You can find a letter around ".$lowest. " meters from your location. <br>";
 
+                        }
+                        else {
+                            echo "<br> Sorry, there is no letter on that location.";
 
+                        }
+                        $con->close();
+                    }
 				?>
 				
 				
