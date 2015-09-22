@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Fun tourist</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.scrolly.min.js"></script>
+    <script src="js/jquery.scrollzer.min.js"></script>
+    <script src="js/skel.min.js"></script>
+    <script src="js/skel-layers.min.js"></script>
+    <script src="js/init.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <noscript>
+        <link rel="stylesheet" href="css/skel.css" />
+        <link rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" href="css/style-wide.css" />
+    </noscript>
+    <!--[if lte IE 9]><link rel="stylesheet" href="css/ie/v9.css" /><![endif]-->
+    <!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+    <script>
+    function check() {
+        var landmarkID = 0;
+        $.ajax({
+            type: 'POST',
+            url: 'http://easybuy.zz.mu/home.php',
+            data: 'lid=' + landmarkID,
+            success: function(result) { // This function is executed when this request is succeed.      
+                if (result.indexOf(".html") == -1)
+                    $('.fa-user').text(" " + result);
+                else
+                    window.location = result;
+            }
+        });
+    }
+
+    function logout() {
+        var landmarkID = 0;
+        $.ajax({
+            type: 'POST',
+            url: 'http://easybuy.zz.mu/logout.php',
+            data: 'lid=' + landmarkID,
+            success: function(result) { // This function is executed when this request is succeed.      
+                window.location = result;
+            }
+        });
+    }
+    </script>
+    <style>
+    .button-help {
+        width: 34px;
+        height: 34px;
+        float: right;
+        margin-top: -50px;
+        margin-right: 1%;
+        color:#fff;
+    }
+    
+    #modalLink:hover {
+        color: rgb(215, 133, 180);
+    }
+    
+    .modalDialog {
+        position: fixed;
+        font-family: Arial, Helvetica, sans-serif;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 99999;
+        opacity: 0;
+        -webkit-transition: opacity 400ms ease-in;
+        -moz-transition: opacity 400ms ease-in;
+        transition: opacity 400ms ease-in;
+        pointer-events: none;
+    }
+    
+    .modalDialog:target {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    .modalDialog > div {
+        width: 87%;
+        min-height: 50%;
+        position: relative;
+        margin: 10% auto;
+        padding: 5px 20px 13px 20px;
+        border-radius: 10px;
+        background: #fff;
+        border: 3px solid black;
+        font-size: medium;
+        line-height: 30px;
+        box-shadow: 3px 3px 4px rgb(113, 103, 103);
+    }
+    
+    .close {
+        background: #606061;
+        color: #FFFFFF;
+        line-height: 25px;
+        position: absolute;
+        right: -12px;
+        text-align: center;
+        top: -10px;
+        width: 24px;
+        text-decoration: none;
+        font-weight: bold;
+        -webkit-border-radius: 12px;
+        -moz-border-radius: 12px;
+        border-radius: 12px;
+        -moz-box-shadow: 1px 1px 3px #000;
+        -webkit-box-shadow: 1px 1px 3px #000;
+        box-shadow: 1px 1px 3px #000;
+        position: absolute;
+    }
+    
+    .close:hover {
+        background: #505354;
+    }
+    
+    .open-modal {
+        width: 50px;
+        height: 50px;
+        background: red;
+        border-radius: 50%;
+        padding: 5px;
+        text-align: center;
+        border: 1px solid #ccc;
+        text-decoration: none;
+    }
+    
+    .open-modal > a {
+        color: black;
+        text-decoration: none;
+    }
+    
+    .sample2 {
+        overflow-y: scroll;
+
+    }
+    
+    #modalLink {
+        text-decoration: none;
+    }
+    
+    .modal-title {
+        font-size: 26px;
+        text-align: center;
+        padding-bottom: 4px;
+        border-bottom: 1px dotted #D39595;
+        margin-bottom: 7px;
+    }
+    
+    @media only screen and (min-width: 550px) {
+        body {
+            background-image: url('../images/cover.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    }
+    
+    body {
+        background-image: url('cover1.jpg');
+        background-repeat: no-repeat;
+    }
+    </style>
+</head>
+
+<body onload="check()">
+    <!-- Header -->
+    <div id="header" class="skel-layers-fixed">
+        <div class="top">
+            <!-- Logo -->
+            <div id="logo">
+                <span class="image "><img src="images/travel.png" alt="" width="50px" height="50px" /></span>
+                <h1 id="title">
+                    <span class="icon fa-user" style="margin-right:5px;"></span>
+                    <!-- USERNAME -->
+                    <br>
+                    <br>
+                    <a href="#" onclick="logout()">Logout</a>
+                </h1>
+            </div>
+            <!-- Nav -->
+            <nav id="nav">
+                <ul>
+                    <li><a href="home.html" id="top-link"><span class="icon fa-home">Home</span></a>
+                    </li>
+                    <li><a href="map.html" id="portfolio-link"><span class="icon fa-map-marker">Location</span></a>
+                    </li>
+                    <li><a href="scrabble.html" id="about-link"><span class="icon fa-pencil">Scrabble</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="bottom">
+            <!-- Social Icons -->
+            <ul class="icons">
+                <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a>
+                </li>
+                <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a>
+                </li>
+                <li><a href="#" class="icon fa-google-plus"><span class="label">Google Plus</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="main" style="">
+        <!-- Intro -->
+        <section id="top">
+            <div class="container" >
+                <header>
+                    <h2 style="color:white; text-decoration: bold; font-size: 35px; margin-top:10%;">Fun Tourist</h2>
+                </header>
+            </div>
+            <div class="button-help" >
+                <a href="#openModal" id="modalLink">
+                    <span class="icon fa-question-circle fa-1x"></span>
+                </a>
+            </div>
+            <p style="width: 100%; margin-top: 45%; font-size: 25px; font-family: 'Source Sans Pro', sans-serif; letter-spacing: 1px; color:#fff; text-decoration: bold; ">
+                Travel, visit new places and through game and fun, win a trip of your choice!</p>
+        </section>
+    </div>
+    <div id="openModal" class="modalDialog">
+        <div>
+            <a href="#close" title="Close" class="close">X</a>
+            <h2 class="modal-title" style="font-family: 'Source Sans Pro', sans-serif;">Help</h2>
+            <div class="sample2">
+                <p style="font-family: 'Source Sans Pro', sans-serif;">
+                First thing you should do is locate yourself on the map and then check if on your location, 
+                there can be found a letter. <br> If there isn't one, you get a hint of where you can find one. <br>
+                If there is, it's yours and placed in Scrabble. <br> There, you can combine the letters you have collected to form a name of a destination. <br> If you are lucky you will win a trip to that place.
+                <br> After submitting your destination, you lose the letters forming it.
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

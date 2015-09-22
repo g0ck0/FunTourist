@@ -121,7 +121,7 @@
 
 				});
 
-				$.scrollzer(ids, { pad: 200, lastHack: true });
+				//$.scrollzer(ids, { pad: 200, lastHack: true });
 
 	});
 
